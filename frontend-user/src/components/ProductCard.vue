@@ -58,12 +58,21 @@ function goToProduct() {
   border-radius: 8px;
   overflow: hidden;
   cursor: pointer;
-  transition: all 0.3s;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-6px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+
+    .product-image img {
+      transform: scale(1.05);
+    }
+  }
+
+  &:active {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
   }
 }
 
@@ -72,6 +81,7 @@ function goToProduct() {
   width: 100%;
   padding-top: 100%;
   background: #f5f5f5;
+  overflow: hidden;
 
   img {
     position: absolute;
@@ -80,6 +90,7 @@ function goToProduct() {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.4s ease;
   }
 
   .product-tag {
@@ -87,10 +98,12 @@ function goToProduct() {
     top: 8px;
     left: 8px;
     padding: 4px 8px;
-    background: #FF5000;
+    background: linear-gradient(135deg, #FF5000, #FF6A26);
     color: #fff;
     font-size: 12px;
     border-radius: 4px;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(255, 80, 0, 0.3);
   }
 }
 
@@ -105,6 +118,11 @@ function goToProduct() {
   height: 42px;
   margin-bottom: 8px;
   font-weight: normal;
+  transition: color 0.2s ease;
+
+  .product-card:hover & {
+    color: #FF5000;
+  }
 }
 
 .product-price {
@@ -141,6 +159,7 @@ function goToProduct() {
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
 }
 
@@ -148,5 +167,36 @@ function goToProduct() {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+// 响应式调整
+@media screen and (max-width: 768px) {
+  .product-info {
+    padding: 10px;
+  }
+
+  .product-name {
+    font-size: 13px;
+    height: 38px;
+  }
+
+  .product-price .current-price {
+    font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .product-info {
+    padding: 8px;
+  }
+
+  .product-name {
+    font-size: 12px;
+    height: 36px;
+  }
+
+  .product-meta {
+    font-size: 11px;
+  }
 }
 </style>

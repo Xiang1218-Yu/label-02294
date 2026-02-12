@@ -46,6 +46,7 @@
               v-model="searchKeyword"
               placeholder="搜索商品"
               size="large"
+              :maxlength="50"
               @keyup.enter="handleSearch"
             />
             <el-button 
@@ -145,10 +146,21 @@ const searchStore = useSearchStore()
 
 const searchKeyword = ref('')
 const searching = ref(false)
+const maxSearchLength = 50
+
+// 处理搜索关键词，过滤特殊字符
+function sanitizeKeyword(keyword) {
+  return keyword.replace(/[<>\"'&\\]/g, '').trim().slice(0, maxSearchLength)
+}
 
 function handleSearch() {
-  if (!searchKeyword.value.trim()) {
-    ElMessage.warning('请输入搜索关键词')
+  const sanitized = sanitizeKeyword(searchKeyword.value)
+  if (!sanitized) {
+    ElMessage.warning('请输入有效的搜索关键词')
+    return
+  }
+  if (sanitized.length < 2) {
+    ElMessage.warning('搜索关键词至少2个字符')
     return
   }
   if (!userStore.isLoggedIn) {
@@ -156,7 +168,8 @@ function handleSearch() {
     router.push('/login')
     return
   }
-  searchStore.setKeyword(searchKeyword.value)
+  searchKeyword.value = sanitized
+  searchStore.setKeyword(sanitized)
   router.push('/')
 }
 
@@ -166,8 +179,9 @@ function quickSearch(keyword) {
     router.push('/login')
     return
   }
-  searchKeyword.value = keyword
-  searchStore.setKeyword(keyword)
+  const sanitized = sanitizeKeyword(keyword)
+  searchKeyword.value = sanitized
+  searchStore.setKeyword(sanitized)
   router.push('/')
 }
 

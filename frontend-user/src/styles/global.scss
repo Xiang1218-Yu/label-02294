@@ -67,6 +67,7 @@ input, textarea {
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
 }
 
@@ -102,4 +103,69 @@ input, textarea {
 
 .el-input__wrapper.is-focus {
   box-shadow: 0 0 0 1px $primary-color inset;
+}
+
+// 页面切换过渡动画
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.fade-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.3s ease;
+}
+
+.slide-enter-from {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.slide-leave-to {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+// 响应式设计
+@media screen and (max-width: 1200px) {
+  .container {
+    width: 100%;
+    padding: 0 20px;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .container {
+    padding: 0 16px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  html, body {
+    font-size: 13px;
+  }
+  
+  .container {
+    padding: 0 12px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  html, body {
+    font-size: 12px;
+  }
+  
+  .container {
+    padding: 0 8px;
+  }
 }

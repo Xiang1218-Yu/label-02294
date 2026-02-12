@@ -134,4 +134,25 @@ const searchResults = computed(() => {
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
 }
+
+// 响应式商品网格
+@media screen and (max-width: 1200px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
 </style>
