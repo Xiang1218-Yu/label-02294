@@ -116,6 +116,9 @@
               <span>共 {{ cartStore.totalCount }} 件商品</span>
               <span class="total-price">合计：<em class="price">{{ cartStore.totalPrice.toFixed(2) }}</em></span>
             </div>
+            <el-button type="primary" class="checkout-btn" @click="handleCheckout">
+              结算
+            </el-button>
           </div>
         </template>
         <template v-else>
@@ -163,22 +166,12 @@ function handleSearch() {
     ElMessage.warning('搜索关键词至少2个字符')
     return
   }
-  if (!userStore.isLoggedIn) {
-    ElMessage.warning('请先登录')
-    router.push('/login')
-    return
-  }
   searchKeyword.value = sanitized
   searchStore.setKeyword(sanitized)
   router.push('/')
 }
 
 function quickSearch(keyword) {
-  if (!userStore.isLoggedIn) {
-    ElMessage.warning('请先登录')
-    router.push('/login')
-    return
-  }
   const sanitized = sanitizeKeyword(keyword)
   searchKeyword.value = sanitized
   searchStore.setKeyword(sanitized)
@@ -200,6 +193,10 @@ function handleCartClick() {
     return
   }
   cartStore.showCart()
+}
+
+function handleCheckout() {
+  ElMessage.success(`结算成功`)
 }
 </script>
 
@@ -412,6 +409,20 @@ function handleCartClick() {
 .cart-footer {
   padding-top: 16px;
   border-top: 1px solid #eee;
+
+  .checkout-btn {
+    width: 100%;
+    margin-top: 12px;
+    height: 40px;
+    font-size: 16px;
+    background-color: #FF5000;
+    border-color: #FF5000;
+
+    &:hover {
+      background-color: #ff6a20;
+      border-color: #ff6a20;
+    }
+  }
 }
 
 .cart-total {
