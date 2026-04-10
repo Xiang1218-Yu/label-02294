@@ -106,9 +106,12 @@ const discount = computed(() => {
 })
 
 function addToCart() {
+  const currentProduct = product.value
+  if (!currentProduct) return
+  
   adding.value = true
   setTimeout(() => {
-    cartStore.addItem(product.value)
+    cartStore.addItem(currentProduct)
     ElMessage.success('已加入购物车')
     adding.value = false
   }, 300)
