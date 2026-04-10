@@ -28,12 +28,23 @@ export function getProductById(id) {
   return recommendProducts.find(p => p.id === Number(id)) || null
 }
 
-// 搜索商品
-export function searchProducts(keyword) {
-  if (!keyword || !keyword.trim()) return recommendProducts
-  const lowerKeyword = keyword.toLowerCase().trim()
-  return recommendProducts.filter(p => 
-    p.name.toLowerCase().includes(lowerKeyword) || 
-    p.shop.toLowerCase().includes(lowerKeyword)
+// 搜索商品 - 支持按关键词和价格范围过滤
+export function searchProducts(keyword, minPrice = 0, maxPrice = Infinity) {
+  let results = recommendProducts
+  
+  // 按关键词过滤
+  if (keyword && keyword.trim()) {
+    const lowerKeyword = keyword.toLowerCase().trim()
+    results = results.filter(p => 
+      p.name.toLowerCase().includes(lowerKeyword) || 
+      p.shop.toLowerCase().includes(lowerKeyword)
+    )
+  }
+  
+  // 按价格范围过滤
+  results = results.filter(p => 
+    p.price >= minPrice && p.price <= maxPrice
   )
+  
+  return results
 }

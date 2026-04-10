@@ -15,6 +15,23 @@
               清除搜索
             </el-button>
           </div>
+
+          <!-- 价格范围过滤器 -->
+          <div class="price-filter-section">
+            <div class="filter-header">
+              <span class="filter-label">价格范围：</span>
+              <span class="price-display">¥{{ priceRange[0] }} - ¥{{ priceRange[1] }}</span>
+            </div>
+            <el-slider
+              v-model="priceRange"
+              :min="searchStore.minPrice"
+              :max="searchStore.maxPrice"
+              range
+              show-input
+              input-size="small"
+              @change="handlePriceRangeChange"
+            />
+          </div>
           
           <div class="product-grid" v-if="searchResults.length > 0">
             <ProductCard 
@@ -61,7 +78,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, onMounted, watch } from 'vue'
 import BannerCarousel from '@/components/BannerCarousel.vue'
 import ProductCard from '@/components/ProductCard.vue'
 import { recommendProducts, searchProducts } from '@/api'
@@ -69,8 +86,39 @@ import { useSearchStore } from '@/stores/search'
 
 const searchStore = useSearchStore()
 
+// 价格范围双向绑定
+const priceRange = ref([searchStore.minPrice, searchStore.maxPrice])
+
+// 初始化价格范围
+onMounted(() => {
+  searchStore.initPriceRange()
+  priceRange.value = [searchStore.minPrice, searchStore.maxPrice]
+})
+
+// 监听搜索状态，当进入搜索模式时初始化价格范围
+watch(
+  () => searchStore.isSearching,
+  (newVal) => {
+    if (newVal) {
+      searchStore.initPriceRange()
+      priceRange.value = [searchStore.minPrice, searchStore.maxPrice]
+    }
+  },
+  { immediate: true }
+)
+
+// 处理价格范围变化
+function handlePriceRangeChange(val) {
+  searchStore.setPriceRange(val[0], val[1])
+}
+
+// 根据关键词和价格范围计算过滤后的搜索结果
 const searchResults = computed(() => {
-  return searchProducts(searchStore.keyword)
+  return searchProducts(
+    searchStore.keyword,
+    searchStore.selectedMinPrice,
+    searchStore.selectedMaxPrice
+  )
 })
 </script>
 
@@ -125,6 +173,48 @@ const searchResults = computed(() => {
     .keyword {
       color: #FF5000;
       font-weight: 600;
+    }
+  }
+}
+
+// 价格范围过滤器样式
+.price-filter-section {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 24px;
+
+  .filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+
+    .filter-label {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .price-display {
+      font-size: 15px;
+      color: #FF5000;
+      font-weight: 600;
+      background: #fff5f0;
+      padding: 4px 12px;
+      border-radius: 4px;
+    }
+  }
+
+  .el-slider {
+    .el-slider__runway {
+      background: #ddd;
+    }
+    .el-slider__bar {
+      background: #FF5000;
+    }
+    .el-slider__button {
+      border-color: #FF5000;
     }
   }
 }
